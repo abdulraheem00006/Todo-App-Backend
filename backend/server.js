@@ -12,12 +12,27 @@
 const express = require("express");
 const app = express();
 const port = 4000;
-const data = require("./Values.json");
+const path = require("path");
+const filepath = path.join(__dirname, "Values.json");
+const data = require(filepath);
+const fs = require("fs");
+
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send(JSON.stringify(data.data));
 });
 
+app.post("/add", (req, res) => {
+  console.log(req.body);
+  const dataReceived = req.body;
+
+  data.data.push(dataReceived);
+  console.log(data);
+  fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
+
+  res.send(data);
+});
 // app.get("/", (req, res) => {
 //   res.send("Hello World");
 // });
