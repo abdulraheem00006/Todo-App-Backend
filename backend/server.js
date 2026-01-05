@@ -1,0 +1,29 @@
+// So this server.js acts as an api
+// Now I have a value.json file which has an object with an array inclosed in the object.
+// The array contains hard coded objects but I want to update that json file dynamically.
+
+/* First lets start with the simple task of sending data to the postman, so that the hard coded
+ objects are visible there. */
+
+/* Now I'll try to import Values.json file that is stored in the backend folder to this file  
+ and then send that hardcoded object to the postman */
+// import data from "./Values.json";
+
+const express = require("express");
+const app = express();
+const port = 4000;
+const data = require("./Values.json");
+
+app.get("/", (req, res) => {
+  res.send(JSON.stringify(data.data));
+});
+
+// app.get("/", (req, res) => {
+//   res.send("Hello World");
+// });
+
+app.listen(port, () => {
+  console.log(`Example app listens on port ${port}`);
+});
+
+// Hello world is visble on the browser and also in the postman app
