@@ -27,11 +27,22 @@ app.post("/add", (req, res) => {
   console.log(req.body);
   const dataReceived = req.body;
 
-  data.data.push(dataReceived);
+  data.push(dataReceived);
   console.log(data);
   fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
 
   res.send(data);
+});
+
+app.delete("/delete", (req, res) => {
+  console.log(req.body.id);
+  const dataDelete = req.body.id;
+
+  const updatedData = data.filter((data) => data.id !== dataDelete);
+
+  fs.writeFileSync(filepath, JSON.stringify(updatedData, null, 2));
+
+  res.send(updatedData);
 });
 // app.get("/", (req, res) => {
 //   res.send("Hello World");
