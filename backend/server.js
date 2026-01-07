@@ -24,26 +24,40 @@ app.get("/", (req, res) => {
 });
 
 app.post("/add", (req, res) => {
-  console.log(req.body);
   const dataReceived = req.body;
 
   data.push(dataReceived);
-  console.log(data);
-  fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
 
-  res.send(data);
+  fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
 });
 
 app.delete("/delete", (req, res) => {
-  console.log(req.body.id);
   const dataDelete = req.body.id;
 
   const updatedData = data.filter((data) => data.id !== dataDelete);
 
   fs.writeFileSync(filepath, JSON.stringify(updatedData, null, 2));
-
-  res.send(updatedData);
 });
+
+app.put("/put/:id", (req, res) => {
+  
+
+  const dataToUpdate = req.body;
+
+  const urlId = Number(req.params.id);
+
+
+  const newObject = data.map((item) => {
+    return urlId === item.id ? { ...item, ...dataToUpdate } : item;
+  });
+
+
+
+  fs.writeFileSync(filepath, JSON.stringify(newObject, null, 2));
+
+  res.json(newObject);
+});
+
 // app.get("/", (req, res) => {
 //   res.send("Hello World");
 // });
