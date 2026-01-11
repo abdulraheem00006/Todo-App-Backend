@@ -42,7 +42,6 @@ app.post("/add", (req, res) => {
   data.push(dataReceived);
 
   writeData(data);
-  res.send(JSON.stringify(data));
 });
 
 app.delete("/delete/:id", (req, res) => {
@@ -51,8 +50,7 @@ app.delete("/delete/:id", (req, res) => {
   const updatedData = data.filter((item) => item.id !== urlId);
 
   writeData(updatedData);
-
-  res.json(updatedData);
+  res.sendStatus(204);
 });
 
 app.put("/put/:id", (req, res) => {
@@ -64,7 +62,6 @@ app.put("/put/:id", (req, res) => {
   });
 
   writeData(newObject);
-  res.json(newObject);
 });
 
 app.listen(port, () => {
