@@ -16,54 +16,57 @@ const path = require("path");
 const filepath = path.join(__dirname, "Values.json");
 const data = require(filepath);
 const fs = require("fs");
+const cors = require("cors");
 
+const readData = () => {
+  const file = fs.readFileSync(filepath, "utf-8");
+  return JSON.parse(file);
+};
+
+const writeData = (data) => {
+  fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
+};
+
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send(JSON.stringify(data.data));
+  const data = readData();
+  res.send(JSON.stringify(data));
 });
 
 app.post("/add", (req, res) => {
   const dataReceived = req.body;
+  const data = readData();
 
   data.push(dataReceived);
 
-  fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
+  writeData(data);
+  res.send(JSON.stringify(data));
 });
 
-app.delete("/delete", (req, res) => {
-  const dataDelete = req.body.id;
+app.delete("/delete/:id", (req, res) => {
+  const data = readData();
+  const urlId = Number(req.params.id);
+  const updatedData = data.filter((item) => item.id !== urlId);
 
-  const updatedData = data.filter((data) => data.id !== dataDelete);
+  writeData(updatedData);
 
-  fs.writeFileSync(filepath, JSON.stringify(updatedData, null, 2));
+  res.json(updatedData);
 });
 
 app.put("/put/:id", (req, res) => {
-  
-
   const dataToUpdate = req.body;
-
   const urlId = Number(req.params.id);
-
 
   const newObject = data.map((item) => {
     return urlId === item.id ? { ...item, ...dataToUpdate } : item;
   });
 
-
-
-  fs.writeFileSync(filepath, JSON.stringify(newObject, null, 2));
-
+  writeData(newObject);
   res.json(newObject);
 });
-
-// app.get("/", (req, res) => {
-//   res.send("Hello World");
-// });
 
 app.listen(port, () => {
   console.log(`Example app listens on port ${port}`);
 });
-
-// Hello world is visble on the browser and also in the postman app
