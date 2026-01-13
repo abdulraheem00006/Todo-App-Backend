@@ -32,7 +32,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   const data = readData();
-  res.send(JSON.stringify(data));
+  res.status(200).json(data);
 });
 
 app.post("/add", (req, res) => {
@@ -40,8 +40,8 @@ app.post("/add", (req, res) => {
   const data = readData();
 
   data.push(dataReceived);
-
   writeData(data);
+  res.sendStatus(201);
 });
 
 app.delete("/delete/:id", (req, res) => {
@@ -50,7 +50,7 @@ app.delete("/delete/:id", (req, res) => {
   const updatedData = data.filter((item) => item.id !== urlId);
 
   writeData(updatedData);
-  res.sendStatus(204);
+  res.sendStatus(200);
 });
 
 app.put("/put/:id", (req, res) => {
@@ -62,6 +62,7 @@ app.put("/put/:id", (req, res) => {
   });
 
   writeData(newObject);
+  res.sendStatus(200);
 });
 
 app.listen(port, () => {
