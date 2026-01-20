@@ -47,6 +47,7 @@ app.post("/add", (req, res) => {
 app.delete("/delete/:id", (req, res) => {
   const data = readData();
   const urlId = Number(req.params.id);
+
   const updatedData = data.filter((item) => item.id !== urlId);
 
   writeData(updatedData);
@@ -54,11 +55,12 @@ app.delete("/delete/:id", (req, res) => {
 });
 
 app.put("/put/:id", (req, res) => {
+  const data = readData();
   const dataToUpdate = req.body;
   const urlId = Number(req.params.id);
-
+ 
   const newObject = data.map((item) => {
-    return urlId === item.id ? { ...item, ...dataToUpdate } : item;
+    return item.id === urlId ? { ...item, ...dataToUpdate } : item;
   });
 
   writeData(newObject);
