@@ -41,7 +41,6 @@ app.post("/add", (req, res) => {
 
   data.push(dataReceived);
   writeData(data);
-
   res.sendStatus(201);
 });
 
@@ -65,7 +64,6 @@ app.put("/put/:id", (req, res) => {
   });
 
   writeData(newObject);
-
   res.sendStatus(200);
 });
 
